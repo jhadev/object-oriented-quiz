@@ -16,21 +16,31 @@ class Question {
 
 //make some question objects with the blueprint
 const question1 = new Question(
-  "Which group released the hit song, 'Smells Like Teen Spirit'?",
-  ["Nirvana", "Backstreet Boys", "The Offspring", "No Doubt"],
-  "Nirvana"
+  "What is not a principle of Object Oriented Programming",
+  [
+    "Abstraction",
+    "Encapsulation",
+    "Inheritence",
+    "Polymorphism",
+    "Impressionism"
+  ],
+  "Impressionism"
 );
 
 const question2 = new Question(
-  "What was Doug's best friend's name?",
-  ["Skeeter", "Mark", "Zach", "Cody"],
-  "Skeeter"
+  "What type of inheritence pattern is utilized in JavaScript?",
+  ["Prototypal", "Classical", "Trust"],
+  "Prototypal"
 );
 
 const question3 = new Question(
-  "What was the name of the principal at Bayside High in Saved By The Bell?",
-  ["Mr.Zhou", "Mr.Driggers", "Mr.Belding", "Mr.Page"],
-  "Mr.Belding"
+  "Which is better? Functional Programming or Object Oriented Programming?",
+  [
+    "Object Oriented Programming",
+    "Functional Programming",
+    "Neither, everything has its uses"
+  ],
+  "Neither, everything has its uses"
 );
 
 Question.prototype.addQuestion = function(arr, question) {
@@ -49,12 +59,12 @@ class Quiz {
   }
 }
 
-Quiz.prototype.randomize = function(array) {
-  for (let i = array.length - 1; i > 0; i--) {
+Quiz.prototype.randomize = function(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
+    [arr[i], arr[j]] = [arr[j], arr[i]];
   }
-  return array;
+  return arr;
 };
 
 Quiz.prototype.runCounter = function() {
@@ -135,7 +145,7 @@ Quiz.prototype.result = function() {
 
 $(document).on("click", "#start", function() {
   $("#quiz").empty();
-  thisQuiz = new Quiz(180);
+  thisQuiz = new Quiz(30);
   thisQuiz.startQuiz(questionBank);
 });
 
