@@ -1,6 +1,6 @@
 let card = $("#quiz-area");
 
-let questions = [];
+let questionBank = [];
 
 let timer;
 
@@ -29,7 +29,11 @@ const question3 = new Question(
   "Mr.Belding"
 )
 
-questions.push(question1, question2, question3)
+Question.prototype.addQuestion = function (arr, question) {
+  arr.push(question)
+}
+
+questionBank.push(question1, question2, question3)
 
 class Quiz {
   constructor(correct, incorrect, counter) {
@@ -62,10 +66,14 @@ Quiz.prototype.start = function () {
 
   $("#start").remove();
 
-  for (question of questions) {
-    card.append(`<h2>${question.question}</h2>`);
-    console.log(question.answers)
-    for (answer of question.answers) {
+  for (questions of questionBank) {
+    const {
+      question,
+      answers
+    } = questions
+    card.append(`<h2>${question}</h2>`);
+    console.log(answers)
+    for (answer of answers) {
       card.append(
         `<div class="form-check">
         <input class="form-check-input" type="radio" id="exampleRadios1" value="${
@@ -85,7 +93,7 @@ Quiz.prototype.start = function () {
 Quiz.prototype.done = function () {
   let inputs = $(".form-check").children(".form-check-input:checked");
   for (let i = 0; i < inputs.length; i++) {
-    if ($(inputs[i]).val() === questions[i].correctAnswer) {
+    if ($(inputs[i]).val() === questionBank[i].correctAnswer) {
       this.correct++;
     } else {
       this.incorrect++;
