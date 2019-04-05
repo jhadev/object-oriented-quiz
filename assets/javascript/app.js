@@ -1,6 +1,5 @@
 let card = $("#quiz-area");
 
-// Question set
 let questions = [];
 
 let timer;
@@ -43,11 +42,8 @@ class Quiz {
 let thisQuiz = new Quiz(0, 0, 10);
 
 Quiz.prototype.countdown = function () {
-  //   this.counter = parseInt(this.counter);
-
   this.counter--;
   console.log(this.counter);
-  //   if (isNaN(this.counter)) this.counter = 10;
   $("#counter-number").html(this.counter);
   if (this.counter === 0) {
     console.log("TIME UP");
@@ -66,16 +62,17 @@ Quiz.prototype.start = function () {
 
   $("#start").remove();
 
-  for (let i = 0; i < questions.length; i++) {
-    card.append("<h2>" + questions[i].question + "</h2>");
-    for (let j = 0; j < questions[i].answers.length; j++) {
+  for (question of questions) {
+    card.append(`<h2>${question.question}</h2>`);
+    console.log(question.answers)
+    for (answer of question.answers) {
       card.append(
         `<div class="form-check">
-        <input class="form-check-input" type="radio" name="question-${i}" id="exampleRadios1" value="${
-          questions[i].answers[j]
+        <input class="form-check-input" type="radio" id="exampleRadios1" value="${
+          answer
         }">
         <label class="form-check-label" for="exampleRadios1">
-        ${questions[i].answers[j]}
+        ${answer}
         </label>
       </div>`
       );
@@ -102,9 +99,9 @@ Quiz.prototype.result = function () {
 
   $("#sub-wrapper h2").remove();
 
-  card.html("<h2>All Done!</h2>");
-  card.append("<h3>Correct Answers: " + this.correct + "</h3>");
-  card.append("<h3>Incorrect Answers: " + this.incorrect + "</h3>");
+  card.html(`<h2>All Done!</h2>`);
+  card.append(`<h3>Correct Answers: ${this.correct}</h3>`);
+  card.append(`<h3>Incorrect Answers: ${this.incorrect}</h3>`);
   card.append(`<button class="btn btn-success" id="start">Start</button>`);
 };
 
