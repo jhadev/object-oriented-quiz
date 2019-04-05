@@ -43,7 +43,7 @@ const question3 = new Question(
   "Neither, everything has its uses"
 );
 
-//class blueprint for new Quiz objects, sets correct and incorrect to 0, and takes in timer value in constructor.
+//class blueprint for new Quiz objects, sets correct and incorrect to 0, sets questionsArray to an empty array and takes in timer value in constructor.
 class Quiz {
   constructor(counter) {
     this.correct = 0;
@@ -52,11 +52,9 @@ class Quiz {
     this.questionsArray = []
   }
 }
-//create a new instance of the quiz object and set it to the thisQuiz variable above. 
-thisQuiz = new Quiz(30);
 
 //method to add questions to any array. Since the exact number of questions for each quiz can be anything the rest parameter is used.
-Quiz.prototype.addQuestion = function (...questions) {
+Quiz.prototype.addQuestions = function (...questions) {
   this.questionsArray.push(...questions);
 };
 
@@ -98,7 +96,6 @@ Quiz.prototype.startQuiz = function () {
       choices
     } = quizQuestion;
 
-
     $("#quiz").append(`
       <h2 class="card-header text-primary rounded">${question}</h2>
      `);
@@ -115,7 +112,7 @@ Quiz.prototype.startQuiz = function () {
 
   $("#quiz").append(`
   <div class="row justify-content-center">
-    <button class="mt-2 btn btn-danger" id='done'>Done</button>
+    <button class="mt-2 btn btn-danger" id="finish">Finish</button>
   </div`);
 };
 
@@ -140,7 +137,7 @@ Quiz.prototype.result = function () {
   clearInterval(timer);
 
   $("#quiz-wrapper h2").remove();
-  //this needs to be changed because it is dependent on the questionBank array.
+
   let score = `${((this.correct / this.questionsArray.length) * 100).toFixed(2)}%`;
 
   $("#quiz").html(`
@@ -161,14 +158,14 @@ Quiz.prototype.result = function () {
 
 $(document).on("click", "#start", function () {
   $("#quiz").empty();
+  //create newQuiz object
   thisQuiz = new Quiz(30);
-  thisQuiz.addQuestion(question1, question2, question3)
+  //add quiz questions
+  thisQuiz.addQuestions(question1, question2, question3)
+  //start quiz
   thisQuiz.startQuiz();
 });
 
-$(document).on("click", "#done", function () {
+$(document).on("click", "#finish", function () {
   thisQuiz.finishQuiz();
 });
-
-// let quiz = Object.getPrototypeOf(thisQuiz);
-// console.log(quiz);
