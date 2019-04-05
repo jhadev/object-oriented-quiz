@@ -58,7 +58,7 @@ Quiz.prototype.runCounter = function() {
   this.counter--;
   $("#counter-number").html(this.counter);
   if (this.counter === 0) {
-    this.done();
+    this.finish();
   }
 };
 
