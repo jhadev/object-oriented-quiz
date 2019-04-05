@@ -43,11 +43,6 @@ const question3 = new Question(
   "Neither, everything has its uses"
 );
 
-
-
-//push questions into the questionBank array
-// questionBank.push(question1, question2, question3);
-
 //class blueprint for new Quiz objects, sets correct and incorrect to 0, and takes in timer value in constructor.
 class Quiz {
   constructor(counter) {
@@ -64,13 +59,6 @@ thisQuiz = new Quiz(30);
 Quiz.prototype.addQuestion = function (...questions) {
   this.questionsArray.push(...questions);
 };
-
-
-//run method on thisQuiz and add questions to questionBank array
-
-
-console.log(thisQuiz)
-
 
 //method to randomize both the questions and answers
 Quiz.prototype.randomize = function (arr) {
@@ -103,14 +91,14 @@ Quiz.prototype.startQuiz = function () {
 
   $("#start").remove();
   this.randomize(this.questionsArray);
-  console.log(this.questionsArray)
   this.questionsArray.forEach((quizQuestion, index) => {
+
     const {
       question,
       choices
     } = quizQuestion;
 
-    console.log(question)
+
     $("#quiz").append(`
       <h2 class="card-header text-primary rounded">${question}</h2>
      `);
