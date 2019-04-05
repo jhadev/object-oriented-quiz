@@ -30,9 +30,9 @@ const question3 = new Question(
   "Mr.Belding"
 );
 
-Question.prototype.addQuestion = function(arr, question) {
-  arr.push(question);
-};
+// Question.prototype.addQuestion = function(arr, question) {
+//   arr.push(question);
+// };
 
 questionBank.push(question1, question2, question3);
 
@@ -45,6 +45,14 @@ class Quiz {
 }
 
 let thisQuiz;
+
+Quiz.prototype.randomizeAnswers = function(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+};
 
 Quiz.prototype.runCounter = function() {
   this.counter--;
@@ -69,10 +77,10 @@ Quiz.prototype.start = function(arr) {
   arr.forEach((quizQuestion, index) => {
     const { question, choices } = quizQuestion;
     card.append(`
-    <div class="card">
-      <div class="card-header">${question}</div>
-      </div>`);
+      <h2 class="card-header text-primary">${question}</h2>
+     `);
     console.log(choices);
+    this.randomizeAnswers(choices);
     for (choice of choices) {
       card.append(
         `<div class="form-check form-check-inline">
