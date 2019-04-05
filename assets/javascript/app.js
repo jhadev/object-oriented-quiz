@@ -44,20 +44,19 @@ class Quiz {
   }
 }
 
-let thisQuiz = new Quiz(0, 0, 120);
+let thisQuiz;
 
-Quiz.prototype.countdown = function() {
+Quiz.prototype.runCounter = function() {
   this.counter--;
   console.log(this.counter);
   $("#counter-number").html(this.counter);
   if (this.counter === 0) {
-    console.log("TIME UP");
     this.done();
   }
 };
 
 Quiz.prototype.start = function(arr) {
-  timer = setInterval(this.countdown.bind(this), 1000);
+  timer = setInterval(this.runCounter.bind(this), 1000);
 
   $("#sub-wrapper").prepend(
     `<h2>Time Remaining: <span id="counter-number">${
@@ -92,7 +91,7 @@ Quiz.prototype.start = function(arr) {
   </div`);
 };
 
-Quiz.prototype.done = function() {
+Quiz.prototype.finish = function() {
   let inputs = $(".form-check").children(".form-check-input:checked");
   console.log(inputs);
   for (let i = 0; i < inputs.length; i++) {
@@ -124,8 +123,8 @@ $(document).on("click", "#start", function() {
 });
 
 $(document).on("click", "#done", function() {
-  thisQuiz.done();
+  thisQuiz.finish();
 });
 
-let quiz = Object.getPrototypeOf(thisQuiz);
-console.log(quiz);
+// let quiz = Object.getPrototypeOf(thisQuiz);
+// console.log(quiz);
