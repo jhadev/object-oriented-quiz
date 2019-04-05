@@ -109,10 +109,13 @@ Quiz.prototype.result = function() {
   clearInterval(timer);
 
   $("#sub-wrapper h2").remove();
+  let score = `${((this.correct / questionBank.length) * 100).toFixed(2)}%`;
+  console.log(score);
 
   card.html(`<h2>All Done!</h2>`);
   card.append(`<h3>Correct choices: ${this.correct}</h3>`);
   card.append(`<h3>Incorrect choices: ${this.incorrect}</h3>`);
+  card.append(`<h2>Your Score: ${score}`);
   card.append(`<button class="btn btn-success" id="start">Start</button>`);
 };
 
