@@ -1,3 +1,5 @@
+//This is all convoluted overkill in my opinion but it is a learning experience.
+
 //declare empty array as question bank
 let questionBank = [];
 //declare variable for timer
@@ -16,7 +18,7 @@ class Question {
 
 //make some question objects with the blueprint
 const question1 = new Question(
-  "What is not a principle of Object Oriented Programming",
+  "What is not a principle of Object Oriented Programming?",
   [
     "Abstraction",
     "Encapsulation",
@@ -43,12 +45,10 @@ const question3 = new Question(
   "Neither, everything has its uses"
 );
 
-Question.prototype.addQuestion = function(arr, question) {
-  arr.push(question);
-};
+
 
 //push questions into the questionBank array
-questionBank.push(question1, question2, question3);
+// questionBank.push(question1, question2, question3);
 
 //class blueprint for new Quiz objects, sets correct and incorrect to 0, and takes in timer value in constructor.
 class Quiz {
@@ -58,8 +58,19 @@ class Quiz {
     this.counter = counter;
   }
 }
+//create a new instance of the quiz object and set it to the thisQuiz variable above. 
+thisQuiz = new Quiz(30);
 
-Quiz.prototype.randomize = function(arr) {
+//method to add questions to any array. Since the exact number of questions for each quiz can be anything the rest parameter is used.
+Quiz.prototype.addQuestion = function (arr, ...questions) {
+  arr.push(...questions);
+};
+
+//run method on thisQuiz and add questions to questionBank array
+thisQuiz.addQuestion(questionBank, question1, question2, question3)
+
+//method to randomize both the questions and answers
+Quiz.prototype.randomize = function (arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1));
     [arr[i], arr[j]] = [arr[j], arr[i]];
@@ -67,7 +78,8 @@ Quiz.prototype.randomize = function(arr) {
   return arr;
 };
 
-Quiz.prototype.runCounter = function() {
+//method to run the counter for the timer. Once the counter hits 0 the finishQuiz method is called.
+Quiz.prototype.runCounter = function () {
   this.counter--;
   $("#counter-number").html(this.counter);
   if (this.counter === 0) {
@@ -75,7 +87,9 @@ Quiz.prototype.runCounter = function() {
   }
 };
 
-Quiz.prototype.startQuiz = function(arr) {
+//method to start the quiz takes in an array.
+Quiz.prototype.startQuiz = function (arr) {
+  //setInterval method called to run the counter method every second. Bind this so it doesn't lose context.
   timer = setInterval(this.runCounter.bind(this), 1000);
 
   $("#quiz-wrapper").prepend(
@@ -87,7 +101,10 @@ Quiz.prototype.startQuiz = function(arr) {
   $("#start").remove();
   this.randomize(arr);
   arr.forEach((quizQuestion, index) => {
-    const { question, choices } = quizQuestion;
+    const {
+      question,
+      choices
+    } = quizQuestion;
     $("#quiz").append(`
       <h2 class="card-header text-primary rounded">${question}</h2>
      `);
@@ -108,10 +125,13 @@ Quiz.prototype.startQuiz = function(arr) {
   </div`);
 };
 
-Quiz.prototype.finishQuiz = function() {
+//method to finish quiz. Checks answers accordingly and runs the result method.
+Quiz.prototype.finishQuiz = function () {
   let inputs = $(".form-check").children(".form-check-input:checked");
   for (let i = 0; i < inputs.length; i++) {
-    const { correctAnswer } = questionBank[i];
+    const {
+      correctAnswer
+    } = questionBank[i];
     if ($(inputs[i]).val() === correctAnswer) {
       this.correct++;
     } else {
@@ -121,10 +141,12 @@ Quiz.prototype.finishQuiz = function() {
   this.result();
 };
 
-Quiz.prototype.result = function() {
+//method to show the results and clear the timer.
+Quiz.prototype.result = function () {
   clearInterval(timer);
 
   $("#quiz-wrapper h2").remove();
+  //this needs to be changed because it is dependent on the questionBank array.
   let score = `${((this.correct / questionBank.length) * 100).toFixed(2)}%`;
 
   $("#quiz").html(`
@@ -143,13 +165,13 @@ Quiz.prototype.result = function() {
   `);
 };
 
-$(document).on("click", "#start", function() {
+$(document).on("click", "#start", function () {
   $("#quiz").empty();
   thisQuiz = new Quiz(30);
   thisQuiz.startQuiz(questionBank);
 });
 
-$(document).on("click", "#done", function() {
+$(document).on("click", "#done", function () {
   thisQuiz.finishQuiz();
 });
 
