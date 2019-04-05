@@ -1,5 +1,3 @@
-let card = $("#quiz-area");
-
 let questionBank = [];
 
 let timer;
@@ -58,14 +56,14 @@ Quiz.prototype.runCounter = function() {
   this.counter--;
   $("#counter-number").html(this.counter);
   if (this.counter === 0) {
-    this.finish();
+    this.finishQuiz();
   }
 };
 
-Quiz.prototype.start = function(arr) {
+Quiz.prototype.startQuiz = function(arr) {
   timer = setInterval(this.runCounter.bind(this), 1000);
 
-  $("#sub-wrapper").prepend(
+  $("#quiz-wrapper").prepend(
     `<h2>Time Remaining: <span id="counter-number">${
       this.counter
     }</span> Seconds</h2>`
@@ -75,13 +73,12 @@ Quiz.prototype.start = function(arr) {
 
   arr.forEach((quizQuestion, index) => {
     const { question, choices } = quizQuestion;
-    card.append(`
+    $("#quiz").append(`
       <h2 class="card-header text-primary rounded">${question}</h2>
      `);
-    console.log(choices);
     this.randomizeAnswers(choices);
     for (choice of choices) {
-      card.append(
+      $("#quiz").append(
         `<div class="form-check form-check-inline">
         <input class="form-check-input" name="${index}" type="radio" id="${choice}" value="${choice}">
         <label class="form-check-label answers" for="${choice}">
@@ -92,15 +89,14 @@ Quiz.prototype.start = function(arr) {
     }
   });
 
-  card.append(`
+  $("#quiz").append(`
   <div class="row justify-content-center">
     <button class="mt-2 btn btn-danger" id='done'>Done</button>
   </div`);
 };
 
-Quiz.prototype.finish = function() {
+Quiz.prototype.finishQuiz = function() {
   let inputs = $(".form-check").children(".form-check-input:checked");
-  console.log(inputs);
   for (let i = 0; i < inputs.length; i++) {
     const { correctAnswer } = questionBank[i];
     if ($(inputs[i]).val() === correctAnswer) {
@@ -115,34 +111,33 @@ Quiz.prototype.finish = function() {
 Quiz.prototype.result = function() {
   clearInterval(timer);
 
-  $("#sub-wrapper h2").remove();
+  $("#quiz-wrapper h2").remove();
   let score = `${((this.correct / questionBank.length) * 100).toFixed(2)}%`;
-  console.log(score);
 
-  card.html(`
+  $("#quiz").html(`
   <div class="card">
     <div class="card-header">
-      <h2>All Done!</h2>
+      <h2>Finished</h2>
     </div>
     <div class="card-body">
     </div>
   </div>`);
-  $(".card-body").append(`<h3>Correct choices: ${this.correct}</h3>`);
-  $(".card-body").append(`<h3>Incorrect choices: ${this.incorrect}</h3>`);
-  $(".card-body").append(`<h2>Your Score: ${score}`);
-  $(".card-body").append(
-    `<button class="btn btn-success" id="start">Start</button>`
-  );
+  $(".card-body").append(`
+  <h3>Correct: ${this.correct}</h3>
+  <h3>Incorrect: ${this.incorrect}</h3>
+  <h2>Your Score: ${score}</h2>
+  <button class="btn btn-success" id="start">Start</button>
+  `);
 };
 
 $(document).on("click", "#start", function() {
-  card.empty();
+  $("#quiz").empty();
   thisQuiz = new Quiz(180);
-  thisQuiz.start(questionBank);
+  thisQuiz.startQuiz(questionBank);
 });
 
 $(document).on("click", "#done", function() {
-  thisQuiz.finish();
+  thisQuiz.finishQuiz();
 });
 
 // let quiz = Object.getPrototypeOf(thisQuiz);
