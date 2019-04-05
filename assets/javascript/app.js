@@ -1,7 +1,11 @@
+//declare empty array as question bank
 let questionBank = [];
-
+//declare variable for timer
 let timer;
+//declare variable for the quiz object
+let thisQuiz;
 
+//class for making the question objects, takes in the question, choices, and correctAnswer.
 class Question {
   constructor(question, choices, correctAnswer) {
     this.question = question;
@@ -10,6 +14,7 @@ class Question {
   }
 }
 
+//make some question objects with the blueprint
 const question1 = new Question(
   "Which group released the hit song, 'Smells Like Teen Spirit'?",
   ["Nirvana", "Backstreet Boys", "The Offspring", "No Doubt"],
@@ -28,12 +33,14 @@ const question3 = new Question(
   "Mr.Belding"
 );
 
-// Question.prototype.addQuestion = function(arr, question) {
-//   arr.push(question);
-// };
+Question.prototype.addQuestion = function(arr, question) {
+  arr.push(question);
+};
 
+//push questions into the questionBank array
 questionBank.push(question1, question2, question3);
 
+//class blueprint for new Quiz objects, sets correct and incorrect to 0, and takes in timer value in constructor.
 class Quiz {
   constructor(counter) {
     this.correct = 0;
@@ -42,9 +49,7 @@ class Quiz {
   }
 }
 
-let thisQuiz;
-
-Quiz.prototype.randomizeAnswers = function(array) {
+Quiz.prototype.randomize = function(array) {
   for (let i = array.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
@@ -70,21 +75,19 @@ Quiz.prototype.startQuiz = function(arr) {
   );
 
   $("#start").remove();
-
+  this.randomize(arr);
   arr.forEach((quizQuestion, index) => {
     const { question, choices } = quizQuestion;
     $("#quiz").append(`
       <h2 class="card-header text-primary rounded">${question}</h2>
      `);
-    this.randomizeAnswers(choices);
+    this.randomize(choices);
     for (choice of choices) {
       $("#quiz").append(
         `<div class="form-check form-check-inline">
-        <input class="form-check-input" name="${index}" type="radio" id="${choice}" value="${choice}">
-        <label class="form-check-label answers" for="${choice}">
-        ${choice}
-        </label>
-      </div>`
+          <input class="form-check-input" name="${index}" type="radio" id="${choice}" value="${choice}">
+          <label class="form-check-label answers" for="${choice}">${choice}</label>
+        </div>`
       );
     }
   });
