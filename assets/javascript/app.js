@@ -69,11 +69,14 @@ Quiz.prototype.start = function(arr) {
 
   arr.forEach((quizQuestion, index) => {
     const { question, choices } = quizQuestion;
-    card.append(`<h2>${question}</h2>`);
+    card.append(`
+    <div class="card">
+      <div class="card-header">${question}</div>
+      </div>`);
     console.log(choices);
     for (choice of choices) {
       card.append(
-        `<div class="form-check">
+        `<div class="form-check form-check-inline">
         <input class="form-check-input" name="${index}" type="radio" id="${choice}" value="${choice}">
         <label class="form-check-label" for="${choice}">
         ${choice}
@@ -83,13 +86,18 @@ Quiz.prototype.start = function(arr) {
     }
   });
 
-  card.append(`<button class="btn btn-danger" id='done'>Done</button>`);
+  card.append(`
+  <div class="row justify-content-center">
+    <button class="mt-2 btn btn-danger" id='done'>Done</button>
+  </div`);
 };
 
 Quiz.prototype.done = function() {
   let inputs = $(".form-check").children(".form-check-input:checked");
+  console.log(inputs);
   for (let i = 0; i < inputs.length; i++) {
-    if ($(inputs[i]).val() === questionBank[i].correctAnswer) {
+    const { correctAnswer } = questionBank[i];
+    if ($(inputs[i]).val() === correctAnswer) {
       this.correct++;
     } else {
       this.incorrect++;
@@ -110,7 +118,8 @@ Quiz.prototype.result = function() {
 };
 
 $(document).on("click", "#start", function() {
-  thisQuiz = new Quiz(0, 0, 120);
+  card.empty();
+  thisQuiz = new Quiz(0, 0, 180);
   thisQuiz.start(questionBank);
 });
 
