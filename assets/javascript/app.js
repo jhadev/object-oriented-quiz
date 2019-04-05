@@ -1,7 +1,5 @@
 //This is all convoluted overkill in my opinion but it is a learning experience.
 
-//declare empty array as question bank
-let questionBank = [];
 //declare variable for timer
 let timer;
 //declare variable for the quiz object
@@ -56,18 +54,23 @@ class Quiz {
     this.correct = 0;
     this.incorrect = 0;
     this.counter = counter;
+    this.questionsArray = []
   }
 }
 //create a new instance of the quiz object and set it to the thisQuiz variable above. 
 thisQuiz = new Quiz(30);
 
 //method to add questions to any array. Since the exact number of questions for each quiz can be anything the rest parameter is used.
-Quiz.prototype.addQuestion = function (arr, ...questions) {
-  arr.push(...questions);
+Quiz.prototype.addQuestion = function (...questions) {
+  this.questionsArray.push(...questions);
 };
 
+
 //run method on thisQuiz and add questions to questionBank array
-thisQuiz.addQuestion(questionBank, question1, question2, question3)
+
+
+console.log(thisQuiz)
+
 
 //method to randomize both the questions and answers
 Quiz.prototype.randomize = function (arr) {
@@ -88,7 +91,7 @@ Quiz.prototype.runCounter = function () {
 };
 
 //method to start the quiz takes in an array.
-Quiz.prototype.startQuiz = function (arr) {
+Quiz.prototype.startQuiz = function () {
   //setInterval method called to run the counter method every second. Bind this so it doesn't lose context.
   timer = setInterval(this.runCounter.bind(this), 1000);
 
@@ -99,12 +102,15 @@ Quiz.prototype.startQuiz = function (arr) {
   );
 
   $("#start").remove();
-  this.randomize(arr);
-  arr.forEach((quizQuestion, index) => {
+  this.randomize(this.questionsArray);
+  console.log(this.questionsArray)
+  this.questionsArray.forEach((quizQuestion, index) => {
     const {
       question,
       choices
     } = quizQuestion;
+
+    console.log(question)
     $("#quiz").append(`
       <h2 class="card-header text-primary rounded">${question}</h2>
      `);
@@ -131,7 +137,7 @@ Quiz.prototype.finishQuiz = function () {
   for (let i = 0; i < inputs.length; i++) {
     const {
       correctAnswer
-    } = questionBank[i];
+    } = this.questionsArray[i];
     if ($(inputs[i]).val() === correctAnswer) {
       this.correct++;
     } else {
@@ -147,7 +153,7 @@ Quiz.prototype.result = function () {
 
   $("#quiz-wrapper h2").remove();
   //this needs to be changed because it is dependent on the questionBank array.
-  let score = `${((this.correct / questionBank.length) * 100).toFixed(2)}%`;
+  let score = `${((this.correct / this.questionsArray.length) * 100).toFixed(2)}%`;
 
   $("#quiz").html(`
   <div class="card">
@@ -168,7 +174,8 @@ Quiz.prototype.result = function () {
 $(document).on("click", "#start", function () {
   $("#quiz").empty();
   thisQuiz = new Quiz(30);
-  thisQuiz.startQuiz(questionBank);
+  thisQuiz.addQuestion(question1, question2, question3)
+  thisQuiz.startQuiz();
 });
 
 $(document).on("click", "#done", function () {
