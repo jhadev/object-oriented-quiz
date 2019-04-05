@@ -37,9 +37,9 @@ const question3 = new Question(
 questionBank.push(question1, question2, question3);
 
 class Quiz {
-  constructor(correct, incorrect, counter) {
-    this.correct = correct;
-    this.incorrect = incorrect;
+  constructor(counter) {
+    this.correct = 0;
+    this.incorrect = 0;
     this.counter = counter;
   }
 }
@@ -137,7 +137,7 @@ Quiz.prototype.result = function() {
 
 $(document).on("click", "#start", function() {
   card.empty();
-  thisQuiz = new Quiz(0, 0, 180);
+  thisQuiz = new Quiz(180);
   thisQuiz.start(questionBank);
 });
 
