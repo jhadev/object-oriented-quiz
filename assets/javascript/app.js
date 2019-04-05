@@ -56,7 +56,6 @@ Quiz.prototype.randomizeAnswers = function(array) {
 
 Quiz.prototype.runCounter = function() {
   this.counter--;
-  console.log(this.counter);
   $("#counter-number").html(this.counter);
   if (this.counter === 0) {
     this.done();
@@ -77,7 +76,7 @@ Quiz.prototype.start = function(arr) {
   arr.forEach((quizQuestion, index) => {
     const { question, choices } = quizQuestion;
     card.append(`
-      <h2 class="card-header text-primary">${question}</h2>
+      <h2 class="card-header text-primary rounded">${question}</h2>
      `);
     console.log(choices);
     this.randomizeAnswers(choices);
@@ -85,7 +84,7 @@ Quiz.prototype.start = function(arr) {
       card.append(
         `<div class="form-check form-check-inline">
         <input class="form-check-input" name="${index}" type="radio" id="${choice}" value="${choice}">
-        <label class="form-check-label" for="${choice}">
+        <label class="form-check-label answers" for="${choice}">
         ${choice}
         </label>
       </div>`
@@ -120,11 +119,20 @@ Quiz.prototype.result = function() {
   let score = `${((this.correct / questionBank.length) * 100).toFixed(2)}%`;
   console.log(score);
 
-  card.html(`<h2>All Done!</h2>`);
-  card.append(`<h3>Correct choices: ${this.correct}</h3>`);
-  card.append(`<h3>Incorrect choices: ${this.incorrect}</h3>`);
-  card.append(`<h2>Your Score: ${score}`);
-  card.append(`<button class="btn btn-success" id="start">Start</button>`);
+  card.html(`
+  <div class="card">
+    <div class="card-header">
+      <h2>All Done!</h2>
+    </div>
+    <div class="card-body">
+    </div>
+  </div>`);
+  $(".card-body").append(`<h3>Correct choices: ${this.correct}</h3>`);
+  $(".card-body").append(`<h3>Incorrect choices: ${this.incorrect}</h3>`);
+  $(".card-body").append(`<h2>Your Score: ${score}`);
+  $(".card-body").append(
+    `<button class="btn btn-success" id="start">Start</button>`
+  );
 };
 
 $(document).on("click", "#start", function() {
