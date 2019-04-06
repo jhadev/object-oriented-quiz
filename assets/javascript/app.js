@@ -128,7 +128,9 @@ Quiz.prototype.setQuestionBank = function () {
 }
 
 Quiz.prototype.hasQuizBeenTaken = function () {
-  if (!this.areEqual(quizzesAlreadyTaken, this.quizQuestionBanks)) {
+  quizzesAlreadyTaken = _.uniq(quizzesAlreadyTaken)
+  console.log(quizzesAlreadyTaken)
+  if (!this.areEqual(quizzesAlreadyTaken.sort(), this.quizQuestionBanks.sort())) {
     this.startQuiz()
   } else {
     console.log("you've taken all the quizzes")
@@ -160,7 +162,6 @@ Quiz.prototype.runCounter = function () {
 
 //method to start the quiz takes in an array.
 Quiz.prototype.startQuiz = function () {
-  !this.areEqual(quizzesAlreadyTaken, this.quizQuestionBanks)
   //setInterval method called to run the counter method every second. Bind this so it doesn't lose context.
   timer = setInterval(this.runCounter.bind(this), 1000);
 
