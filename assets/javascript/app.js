@@ -71,11 +71,32 @@ const trivia3 = new Question(
   "Mr.Belding"
 );
 
+const sciTrivia1 = new Question(
+  "What is the name of Jupiter's largest moon",
+  ["Oberon", "Ganymede", "Titan", "Europa"],
+  "Ganymede"
+)
+
+const sciTrivia2 = new Question(
+  "What does the 'c' in E=mc^2 stand for?",
+  ["Energy", "Speed of Light", "Mass", "Dark Matter"],
+  "Speed of Light"
+)
+
+const sciTrivia3 = new Question(
+  "What precious stone is the hardest?",
+  ["Diamond", "Ruby", "Sapphire", "Emerald"],
+  "Diamond"
+)
+
+
+
 //declare some question group arrays to use in the addQuestions method
 const oopQuiz = [oop1, oop2, oop3]
 const triviaQuiz = [trivia1, trivia2, trivia3]
+const sciQuiz = [sciTrivia1, sciTrivia2, sciTrivia3]
 //flatten this array but can't use .flat() bc edge is poop.
-const comboQuiz = [oopQuiz, triviaQuiz].reduce((a, b) => a.concat(b), [])
+const comboQuiz = [oopQuiz, sciQuiz].reduce((a, b) => a.concat(b), [])
 
 //class blueprint for new Quiz objects, sets correct and incorrect to 0, sets questionsArray and quizQuestionBanks to an empty array 
 class Quiz {
@@ -112,7 +133,7 @@ Quiz.prototype.setQuestionBank = function () {
     //set questions array to the randomly chosen bank
     this.questionsArray = this.quizQuestionBanks[randomIndex]
     //set counter to a certain amount of seconds per question
-    this.counter = this.questionsArray.length * 20
+    this.counter = this.questionsArray.length * 10
     //start the quiz
     this.startQuiz()
   } else {
@@ -239,7 +260,7 @@ Quiz.prototype.result = function () {
   <h3>Total Correct: ${totalCorrect}</h3>
   <h3>Total Incorrect: ${totalIncorrect}</h3>
   <h2>Total Score: ${totalScore}</h3>
-  <button class="btn btn-success mt-2" id="start">Start</button>
+  <button class="btn btn-success mt-2" id="start">Start Next Quiz</button>
   `);
 
   if (quizzesAlreadyTaken.length === this.quizQuestionBanks.length) {
@@ -264,7 +285,7 @@ $(document).on("click", "#start", function () {
   //create newQuiz object
   thisQuiz = new Quiz();
   //add quiz question arrays declared earlier
-  thisQuiz.addQuestionBank(oopQuiz, triviaQuiz, comboQuiz)
+  thisQuiz.addQuestionBank(oopQuiz, triviaQuiz, sciQuiz)
   //set the questionBank to the new quiz
   thisQuiz.setQuestionBank()
   //start quiz
