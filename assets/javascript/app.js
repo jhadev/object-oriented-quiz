@@ -246,6 +246,7 @@ Quiz.prototype.result = function () {
     //remove start button so you can't click it again bc the browser will crash. condition in set question bank causes it.
     $("#start").remove()
     $(".card-header").html(`<h3>You've taken all the quizzes!</h3>`)
+    $(".card-body").append(`<button class="btn btn-success mt-2" id="start-over">Start Over</button>`)
   }
 };
 
@@ -273,3 +274,7 @@ $(document).on("click", "#start", function () {
 $(document).on("click", "#finish", function () {
   thisQuiz.finishQuiz();
 });
+
+$(document).on("click", "#start-over", function () {
+  window.location.reload()
+})
