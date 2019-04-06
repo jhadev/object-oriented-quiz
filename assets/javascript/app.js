@@ -6,7 +6,7 @@ let timer;
 let thisQuiz;
 
 let repeatedQuiz = false
-const repeatedQuizIndex = []
+let repeatedQuizIndex = []
 
 //keep track of quiz totals since a new quiz object if being created for each new quiz.
 let totalCorrect = 0
@@ -109,9 +109,10 @@ Quiz.prototype.setQuestionBank = function () {
     //if true run this method again
     this.setQuestionBank()
   }
+  let size = repeatedQuizIndex.length
   //trim end of array since only the first 2 indexes are needed to check for the same quiz
-  if (repeatedQuizIndex.length > 2) {
-    repeatedQuizIndex.pop()
+  if (size > 2) {
+    repeatedQuizIndex.splice(2, size)
   }
   //set counter for 10 seconds per question in array
   this.counter = this.questionsArray.length * 10
@@ -231,7 +232,7 @@ Quiz.prototype.result = function () {
 $("#quiz").on("change", ".form-check-input", function () {
   // GET question index out of "name" attribute so we know what question you answered
   const questionIndex = $(this).attr("name");
-  // get value out of radio button you selected
+  // get value out of radio button selected
   const answer = $(this).val();
   // set answer to question's userAnswer property
   thisQuiz.questionsArray[questionIndex].userAnswer = answer;
