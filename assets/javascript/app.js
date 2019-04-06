@@ -5,6 +5,9 @@ let timer;
 //declare variable for the quiz object
 let thisQuiz;
 
+let repeatedQuiz = false
+let repeatedQuizIndex = []
+
 //class for making the question objects, takes in the question, choices, and correctAnswer.
 class Question {
   constructor(question, choices, correctAnswer) {
@@ -60,7 +63,7 @@ const trivia3 = new Question(
   ["Mr.Zhou", "Mr.Driggers", "Mr.Belding", "Mr.Page"],
   "Mr.Belding"
 );
-//class blueprint for new Quiz objects, sets correct and incorrect to 0, sets questionsArray to an empty array and takes in timer value in constructor.
+//class blueprint for new Quiz objects, sets correct and incorrect to 0, sets questionsArray and quizQuestionBanks to an empty array 
 class Quiz {
   constructor() {
     this.correct = 0;
@@ -68,20 +71,37 @@ class Quiz {
     this.counter = 0;
     //questionsArray will hold the quiz array for the specific instance of the quiz being generated
     this.questionsArray = []
-    //this array holds all our questionBanks as an array of arrays, allowing the quiz to be randomly generated.
+    //this array holds all the questionBanks as an array of arrays, allowing the quiz to be randomly generated.
     this.quizQuestionBanks = []
   }
 }
 
+
+
 //method to add questions to any array. Since the exact number of questions for each quiz can be anything the rest parameter is used.
-Quiz.prototype.addAndSetQuestionBank = function (...questions) {
+Quiz.prototype.addQuestionBank = function (...questions) {
   //push our array of questionBanks
   this.quizQuestionBanks.push(...questions);
-  //set questionsArray to a random bank
-  this.questionsArray = this.quizQuestionBanks[Math.floor(Math.random() * this.quizQuestionBanks.length)]
-  //set counter for 10 seconds per question
+}
+
+Quiz.prototype.setQuestionBank = function () {
+  let randomIndex = Math.floor(Math.random() * this.quizQuestionBanks.length)
+  repeatedQuizIndex.unshift(randomIndex)
+  console.log(repeatedQuizIndex)
+  if (repeatedQuizIndex[0] !== repeatedQuizIndex[1]) {
+    repeatedQuiz = false
+    this.questionsArray = this.quizQuestionBanks[randomIndex]
+
+  } else {
+    repeatedQuiz = true;
+    this.setQuestionBank()
+  }
+
+  if (repeatedQuizIndex.length > 2) {
+    repeatedQuizIndex.pop()
+  }
   this.counter = this.questionsArray.length * 10
-};
+}
 
 //method to convert seconds into minutes for the counter
 Quiz.prototype.convertTime = function (timeInSeconds) {
@@ -191,9 +211,10 @@ $(document).on("click", "#start", function () {
   //create newQuiz object
   thisQuiz = new Quiz();
   //add quiz questions
-  thisQuiz.addAndSetQuestionBank(
+  thisQuiz.addQuestionBank(
     [oop1, oop2, oop3], [trivia1, trivia2, trivia3], [trivia1, trivia2, trivia3, oop1, oop2, oop3])
   //start quiz
+  thisQuiz.setQuestionBank()
   thisQuiz.startQuiz();
 });
 
