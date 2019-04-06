@@ -85,21 +85,25 @@ Quiz.prototype.addQuestionBank = function (...questions) {
 }
 
 Quiz.prototype.setQuestionBank = function () {
+  //grab random index based on question bank array
   let randomIndex = Math.floor(Math.random() * this.quizQuestionBanks.length)
+  //add randomIndex to repeatedQuizIndex[0]
   repeatedQuizIndex.unshift(randomIndex)
   console.log(repeatedQuizIndex)
+  //if first 2 index numbers do not match set the questionsArray to the quizQuestionBank array at [randomIndex] 
   if (repeatedQuizIndex[0] !== repeatedQuizIndex[1]) {
     repeatedQuiz = false
     this.questionsArray = this.quizQuestionBanks[randomIndex]
-
   } else {
     repeatedQuiz = true;
+    //if true run this method again
     this.setQuestionBank()
   }
-
+  //trim end of array since only the first 2 indexes are needed to check for the same quiz
   if (repeatedQuizIndex.length > 2) {
     repeatedQuizIndex.pop()
   }
+  //set counter for 10 seconds per question in array
   this.counter = this.questionsArray.length * 10
 }
 
