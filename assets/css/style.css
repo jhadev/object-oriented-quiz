@@ -1,3 +1,18 @@
 .answers {
   font-size: 20px;
 }
+
+#quiz>h2 {
+  font-size: 1.8rem;
+}
+
+@media screen and (max-width: 640px) {
+
+  #quiz>h2 {
+    font-size: 1.1rem
+  }
+
+  .answers {
+    font-size: 0.9rem
+  }
+}

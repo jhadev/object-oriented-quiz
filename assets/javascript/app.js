@@ -147,7 +147,7 @@ Quiz.prototype.startQuiz = function () {
   timer = setInterval(this.runCounter.bind(this), 1000);
 
   $("#quiz-wrapper").prepend(
-    `<h2>Time Remaining: <span id="counter-number">${
+    `<h2 class="my-4">Time Remaining: <span id="counter-number">${
       this.convertTime(this.counter)
     }</span></h2>`
   );
@@ -162,7 +162,7 @@ Quiz.prototype.startQuiz = function () {
     } = quizQuestion;
 
     $("#quiz").append(`
-      <h2 class="card-header text-primary rounded">${question}</h2>
+      <h2 class="rounded mt-2">${question}</h2>
      `);
     this.randomize(choices);
     for (choice of choices) {
@@ -210,11 +210,14 @@ Quiz.prototype.result = function () {
   totalScore = `${((totalCorrect / totalQuestionCount) * 100).toFixed(2)}%`
 
   $("#quiz").html(`
-  <div class="card">
-    <div class="card-header">
-      <h2>Finished</h2>
-    </div>
-    <div class="card-body">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-6">
+      <div class="card mt-4 text-dark">
+        <div class="card-header">
+        <h2>Finished</h2>
+        </div>
+      <div class="card-body"></div>
+     </div>
     </div>
   </div>`);
   $(".card-body").append(`
