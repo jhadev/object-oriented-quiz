@@ -7,6 +7,7 @@ let thisQuiz;
 
 let repeatedQuiz = false
 let repeatedQuizIndex = []
+let quizzesAlreadyTaken = []
 
 //keep track of quiz totals since a new quiz object if being created for each new quiz.
 let totalCorrect = 0
@@ -95,6 +96,10 @@ Quiz.prototype.addQuestionBank = function (...questions) {
   this.quizQuestionBanks.push(...questions);
 }
 
+Quiz.prototype.areEqual = function (arr1, arr2) {
+  return _.isEqual(arr1, arr2)
+}
+
 Quiz.prototype.setQuestionBank = function () {
   //grab random index based on question bank array
   let randomIndex = Math.floor(Math.random() * this.quizQuestionBanks.length)
@@ -104,6 +109,10 @@ Quiz.prototype.setQuestionBank = function () {
   if (repeatedQuizIndex[0] !== repeatedQuizIndex[1]) {
     repeatedQuiz = false
     this.questionsArray = this.quizQuestionBanks[randomIndex]
+    quizzesAlreadyTaken.push(this.questionsArray)
+    console.log(quizzesAlreadyTaken)
+    console.log(this.quizQuestionBanks)
+    this.hasQuizBeenTaken()
   } else {
     repeatedQuiz = true;
     //if true run this method again
@@ -116,6 +125,14 @@ Quiz.prototype.setQuestionBank = function () {
   }
   //set counter for 10 seconds per question in array
   this.counter = this.questionsArray.length * 10
+}
+
+Quiz.prototype.hasQuizBeenTaken = function () {
+  if (!this.areEqual(quizzesAlreadyTaken, this.quizQuestionBanks)) {
+    this.startQuiz()
+  } else {
+    console.log("you've taken all the quizzes")
+  }
 }
 
 //method to convert seconds into minutes for the counter
@@ -143,6 +160,7 @@ Quiz.prototype.runCounter = function () {
 
 //method to start the quiz takes in an array.
 Quiz.prototype.startQuiz = function () {
+  !this.areEqual(quizzesAlreadyTaken, this.quizQuestionBanks)
   //setInterval method called to run the counter method every second. Bind this so it doesn't lose context.
   timer = setInterval(this.runCounter.bind(this), 1000);
 
@@ -250,7 +268,7 @@ $(document).on("click", "#start", function () {
   //set the questionBank to the new quiz
   thisQuiz.setQuestionBank()
   //start quiz
-  thisQuiz.startQuiz();
+  // thisQuiz.startQuiz();
 });
 
 $(document).on("click", "#finish", function () {
