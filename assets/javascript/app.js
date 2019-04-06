@@ -114,7 +114,7 @@ Quiz.prototype.setQuestionBank = function () {
 
 //method to convert seconds into minutes for the counter
 Quiz.prototype.convertTime = function (timeInSeconds) {
-  return ~~(timeInSeconds / 60) + ":" + (timeInSeconds % 60 < 10 ? "0" : "") + timeInSeconds % 60;
+  return `${Math.floor(timeInSeconds / 60)}:${(timeInSeconds % 60 < 10 ? "0" : "") + timeInSeconds % 60}`;
 }
 
 //method to randomize both the questions and answers
