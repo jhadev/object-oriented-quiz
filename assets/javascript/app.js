@@ -6,7 +6,7 @@ let timer;
 let thisQuiz;
 
 let repeatedQuiz = false
-const repeatedQuizIndex = new Array()
+const repeatedQuizIndex = []
 
 //keep track of quiz totals since a new quiz object if being created for each new quiz.
 let totalCorrect = 0
@@ -70,10 +70,10 @@ const trivia3 = new Question(
 );
 
 //declare some question group arrays to use in the addQuestions method
-const oopQuiz = new Array(oop1, oop2, oop3)
-const triviaQuiz = new Array(trivia1, trivia2, trivia3)
+const oopQuiz = [oop1, oop2, oop3]
+const triviaQuiz = [trivia1, trivia2, trivia3]
 //flatten this array but can't use .flat() bc edge is poop.
-const comboQuiz = new Array(oopQuiz, triviaQuiz).reduce((a, b) => a.concat(b), [])
+const comboQuiz = [oopQuiz, triviaQuiz].reduce((a, b) => a.concat(b), [])
 
 //class blueprint for new Quiz objects, sets correct and incorrect to 0, sets questionsArray and quizQuestionBanks to an empty array 
 class Quiz {
@@ -82,9 +82,9 @@ class Quiz {
     this.incorrect = 0;
     this.counter = 0;
     //questionsArray will hold the quiz array for the specific instance of the quiz being generated
-    this.questionsArray = new Array()
+    this.questionsArray = []
     //this array holds all the questionBanks as an array of arrays, allowing the quiz to be randomly generated.
-    this.quizQuestionBanks = new Array()
+    this.quizQuestionBanks = []
   }
 }
 
