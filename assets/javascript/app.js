@@ -15,7 +15,7 @@ class Question {
 }
 
 //make some question objects with the blueprint
-const question1 = new Question(
+const oop1 = new Question(
   "What is not a principle of Object Oriented Programming?",
   [
     "Abstraction",
@@ -27,13 +27,13 @@ const question1 = new Question(
   "Impressionism"
 );
 
-const question2 = new Question(
+const oop2 = new Question(
   "What type of inheritence pattern is utilized in JavaScript?",
   ["Prototypal", "Classical", "Trust"],
   "Prototypal"
 );
 
-const question3 = new Question(
+const oop3 = new Question(
   "Which is better? Functional Programming or Object Oriented Programming?",
   [
     "Object Oriented Programming",
@@ -77,10 +77,10 @@ class Quiz {
 Quiz.prototype.addAndSetQuestionBank = function (...questions) {
   //push our array of questionBanks
   this.quizQuestionBanks.push(...questions);
-  //randomly set questionsArray to a random bank
+  //set questionsArray to a random bank
   this.questionsArray = this.quizQuestionBanks[Math.floor(Math.random() * this.quizQuestionBanks.length)]
-  //set counter for 15 seconds per question
-  this.counter = this.questionsArray.length * 15
+  //set counter for 10 seconds per question
+  this.counter = this.questionsArray.length * 10
 };
 
 //method to convert seconds into minutes for the counter
@@ -142,7 +142,7 @@ Quiz.prototype.startQuiz = function () {
 
   $("#quiz").append(`
   <div class="row justify-content-center">
-    <button class="mt-2 btn btn-danger" id="finish">Finish</button>
+    <button class="mt-4 btn btn-danger" id="finish">Finish</button>
   </div`);
 };
 
@@ -191,8 +191,8 @@ $(document).on("click", "#start", function () {
   //create newQuiz object
   thisQuiz = new Quiz();
   //add quiz questions
-  thisQuiz.addAndSetQuestionBank([question1, question2, question3], [trivia1, trivia2, trivia3], [trivia1, trivia2, trivia3, question1, question2, question3])
-  console.log(thisQuiz)
+  thisQuiz.addAndSetQuestionBank(
+    [oop1, oop2, oop3], [trivia1, trivia2, trivia3], [trivia1, trivia2, trivia3, oop1, oop2, oop3])
   //start quiz
   thisQuiz.startQuiz();
 });
