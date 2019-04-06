@@ -43,20 +43,50 @@ const question3 = new Question(
   "Neither, everything has its uses"
 );
 
+const trivia1 = new Question(
+  "Which group released the hit song, 'Smells Like Teen Spirit'?",
+  ["Nirvana", "Backstreet Boys", "The Offspring", "No Doubt"],
+  "Nirvana"
+);
+
+const trivia2 = new Question(
+  "What was Doug's best friend's name?",
+  ["Skeeter", "Mark", "Zach", "Cody"],
+  "Skeeter"
+);
+
+const trivia3 = new Question(
+  "What was the name of the principal at Bayside High in Saved By The Bell?",
+  ["Mr.Zhou", "Mr.Driggers", "Mr.Belding", "Mr.Page"],
+  "Mr.Belding"
+);
 //class blueprint for new Quiz objects, sets correct and incorrect to 0, sets questionsArray to an empty array and takes in timer value in constructor.
 class Quiz {
-  constructor(counter) {
+  constructor() {
     this.correct = 0;
     this.incorrect = 0;
-    this.counter = counter;
+    this.counter = 0;
+    //questionsArray will hold the quiz array for the specific instance of the quiz being generated
     this.questionsArray = []
+    //this array holds all our questionBanks as an array of arrays, allowing the quiz to be randomly generated.
+    this.quizQuestionBanks = []
   }
 }
 
 //method to add questions to any array. Since the exact number of questions for each quiz can be anything the rest parameter is used.
-Quiz.prototype.addQuestions = function (...questions) {
-  this.questionsArray.push(...questions);
+Quiz.prototype.addAndSetQuestionBank = function (...questions) {
+  //push our array of questionBanks
+  this.quizQuestionBanks.push(...questions);
+  //randomly set questionsArray to a random bank
+  this.questionsArray = this.quizQuestionBanks[Math.floor(Math.random() * this.quizQuestionBanks.length)]
+  //set counter for 15 seconds per question
+  this.counter = this.questionsArray.length * 15
 };
+
+//method to convert seconds into minutes for the counter
+Quiz.prototype.convertTime = function (timeInSeconds) {
+  return ~~(timeInSeconds / 60) + ":" + (timeInSeconds % 60 < 10 ? "0" : "") + timeInSeconds % 60;
+}
 
 //method to randomize both the questions and answers
 Quiz.prototype.randomize = function (arr) {
@@ -70,7 +100,7 @@ Quiz.prototype.randomize = function (arr) {
 //method to run the counter for the timer. Once the counter hits 0 the finishQuiz method is called.
 Quiz.prototype.runCounter = function () {
   this.counter--;
-  $("#counter-number").html(this.counter);
+  $("#counter-number").html(this.convertTime(this.counter));
   if (this.counter === 0) {
     this.finishQuiz();
   }
@@ -83,8 +113,8 @@ Quiz.prototype.startQuiz = function () {
 
   $("#quiz-wrapper").prepend(
     `<h2>Time Remaining: <span id="counter-number">${
-      this.counter
-    }</span> Seconds</h2>`
+      this.convertTime(this.counter)
+    }</span></h2>`
   );
 
   $("#start").remove();
@@ -159,9 +189,10 @@ Quiz.prototype.result = function () {
 $(document).on("click", "#start", function () {
   $("#quiz").empty();
   //create newQuiz object
-  thisQuiz = new Quiz(30);
+  thisQuiz = new Quiz();
   //add quiz questions
-  thisQuiz.addQuestions(question1, question2, question3)
+  thisQuiz.addAndSetQuestionBank([question1, question2, question3], [trivia1, trivia2, trivia3], [trivia1, trivia2, trivia3, question1, question2, question3])
+  console.log(thisQuiz)
   //start quiz
   thisQuiz.startQuiz();
 });
