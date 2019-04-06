@@ -1,4 +1,4 @@
-//This is all convoluted overkill in my opinion but it is a learning experience.
+//This is all overkill in my opinion but it is a good learning experience.
 
 //declare variable for timer
 let timer;
@@ -7,6 +7,11 @@ let thisQuiz;
 
 let repeatedQuiz = false
 const repeatedQuizIndex = new Array()
+
+//keep track of quiz totals since a new quiz object if being created for each new quiz.
+let totalCorrect = 0
+let totalIncorrect = 0
+let totalQuestionCount = 0
 
 //class for making the question objects, takes in the question, choices, and correctAnswer.
 class Question {
@@ -65,10 +70,10 @@ const trivia3 = new Question(
 );
 
 //declare some question group arrays to use in the addQuestions method
-const oopArr = new Array(oop1, oop2, oop3)
-const triviaArr = new Array(trivia1, trivia2, trivia3)
+const oopQuiz = new Array(oop1, oop2, oop3)
+const triviaQuiz = new Array(trivia1, trivia2, trivia3)
 //flatten this array but can't use .flat() bc edge is poop.
-const comboArr = new Array(oopArr, triviaArr).reduce((a, b) => a.concat(b), [])
+const comboQuiz = new Array(oopQuiz, triviaQuiz).reduce((a, b) => a.concat(b), [])
 
 //class blueprint for new Quiz objects, sets correct and incorrect to 0, sets questionsArray and quizQuestionBanks to an empty array 
 class Quiz {
@@ -94,7 +99,6 @@ Quiz.prototype.setQuestionBank = function () {
   let randomIndex = Math.floor(Math.random() * this.quizQuestionBanks.length)
   //add randomIndex to repeatedQuizIndex[0]
   repeatedQuizIndex.unshift(randomIndex)
-  console.log(repeatedQuizIndex)
   //if first 2 index numbers do not match set the questionsArray to the quizQuestionBank array at [randomIndex] 
   if (repeatedQuizIndex[0] !== repeatedQuizIndex[1]) {
     repeatedQuiz = false
@@ -198,6 +202,10 @@ Quiz.prototype.result = function () {
   $("#quiz-wrapper h2").remove();
 
   let score = `${((this.correct / this.questionsArray.length) * 100).toFixed(2)}%`;
+  totalCorrect = this.correct + totalCorrect
+  totalIncorrect = this.incorrect + totalIncorrect
+  totalQuestionCount = this.questionsArray.length + totalQuestionCount
+  totalScore = `${((totalCorrect / totalQuestionCount) * 100).toFixed(2)}%`
 
   $("#quiz").html(`
   <div class="card">
@@ -211,7 +219,11 @@ Quiz.prototype.result = function () {
   <h3>Correct: ${this.correct}</h3>
   <h3>Incorrect: ${this.incorrect}</h3>
   <h2>Your Score: ${score}</h2>
-  <button class="btn btn-success" id="start">Start</button>
+  <hr>
+  <h3>Total Correct: ${totalCorrect}</h3>
+  <h3>Total Incorrect: ${totalIncorrect}</h3>
+  <h2>Total Score: ${totalScore}</h3>
+  <button class="btn btn-success mt-2" id="start">Start</button>
   `);
 };
 
@@ -220,7 +232,7 @@ $(document).on("click", "#start", function () {
   //create newQuiz object
   thisQuiz = new Quiz();
   //add quiz question arrays declared earlier
-  thisQuiz.addQuestionBank(oopArr, triviaArr, comboArr)
+  thisQuiz.addQuestionBank(oopQuiz, triviaQuiz, comboQuiz)
   //set the questionBank to the new quiz
   thisQuiz.setQuestionBank()
   //start quiz
