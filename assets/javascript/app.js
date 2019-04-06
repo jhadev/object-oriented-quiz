@@ -103,37 +103,21 @@ Quiz.prototype.areEqual = function (arr1, arr2) {
 Quiz.prototype.setQuestionBank = function () {
   //grab random index based on question bank array
   let randomIndex = Math.floor(Math.random() * this.quizQuestionBanks.length)
+  console.log(randomIndex)
   //add randomIndex to repeatedQuizIndex[0]
-  repeatedQuizIndex.unshift(randomIndex)
-  //if first 2 index numbers do not match set the questionsArray to the quizQuestionBank array at [randomIndex] 
-  if (repeatedQuizIndex[0] !== repeatedQuizIndex[1]) {
-    repeatedQuiz = false
+  //if repeated Quiz index does not include the random index
+  if (!repeatedQuizIndex.includes(randomIndex)) {
+    //set index to [0]
+    repeatedQuizIndex.unshift(randomIndex)
+    //set questions array to the randomly chosen bank
     this.questionsArray = this.quizQuestionBanks[randomIndex]
-    quizzesAlreadyTaken.push(this.questionsArray)
-    console.log(quizzesAlreadyTaken)
-    console.log(this.quizQuestionBanks)
-    this.hasQuizBeenTaken()
-  } else {
-    repeatedQuiz = true;
-    //if true run this method again
-    this.setQuestionBank()
-  }
-  let size = repeatedQuizIndex.length
-  //trim end of array since only the first 2 indexes are needed to check for the same quiz
-  if (size > 2) {
-    repeatedQuizIndex.splice(2, size)
-  }
-  //set counter for 10 seconds per question in array
-  this.counter = this.questionsArray.length * 10
-}
-
-Quiz.prototype.hasQuizBeenTaken = function () {
-  quizzesAlreadyTaken = _.uniq(quizzesAlreadyTaken)
-  console.log(quizzesAlreadyTaken)
-  if (!this.areEqual(quizzesAlreadyTaken.sort(), this.quizQuestionBanks.sort())) {
+    //set counter to a certain amount of seconds per question
+    this.counter = this.questionsArray.length * 20
+    //start the quiz
     this.startQuiz()
   } else {
-    console.log("you've taken all the quizzes")
+    //run this again
+    this.setQuestionBank()
   }
 }
 
@@ -162,46 +146,54 @@ Quiz.prototype.runCounter = function () {
 
 //method to start the quiz takes in an array.
 Quiz.prototype.startQuiz = function () {
-  //setInterval method called to run the counter method every second. Bind this so it doesn't lose context.
-  timer = setInterval(this.runCounter.bind(this), 1000);
+  console.log(quizzesAlreadyTaken)
+  //checking if the 2 arrays are equal before allowing quiz to be taken.
+  if (!this.areEqual(quizzesAlreadyTaken.sort(), this.quizQuestionBanks.sort())) {
+    //setInterval method called to run the counter method every second. Bind this so it doesn't lose context.
+    timer = setInterval(this.runCounter.bind(this), 1000);
 
-  $("#quiz-wrapper").prepend(
-    `<h2 class="my-4">Time Remaining: <span id="counter-number">${
+    $("#quiz-wrapper").prepend(
+      `<h2 class="my-4">Time Remaining: <span id="counter-number">${
       this.convertTime(this.counter)
     }</span></h2>`
-  );
+    );
 
-  $("#start").remove();
-  this.randomize(this.questionsArray);
-  this.questionsArray.forEach((quizQuestion, index) => {
+    $("#start").remove();
+    this.randomize(this.questionsArray);
+    this.questionsArray.forEach((quizQuestion, index) => {
 
-    const {
-      question,
-      choices
-    } = quizQuestion;
+      const {
+        question,
+        choices
+      } = quizQuestion;
 
-    $("#quiz").append(`
+      $("#quiz").append(`
       <h2 class="rounded mt-2">${question}</h2>
      `);
-    this.randomize(choices);
-    for (choice of choices) {
-      $("#quiz").append(
-        `<div class="form-check form-check-inline">
+      this.randomize(choices);
+      for (choice of choices) {
+        $("#quiz").append(
+          `<div class="form-check form-check-inline">
           <input class="form-check-input" name="${index}" type="radio" id="${choice}" value="${choice}">
           <label class="form-check-label answers" for="${choice}">${choice}</label>
         </div>`
-      );
-    }
-  });
+        );
+      }
+    });
 
-  $("#quiz").append(`
+    $("#quiz").append(`
   <div class="row justify-content-center">
     <button class="mt-4 btn btn-danger" id="finish">Finish</button>
   </div`);
+  } else {
+    this.result()
+  }
 };
 
 //method to finish quiz. Checks answers accordingly and runs the result method.
 Quiz.prototype.finishQuiz = function () {
+  //push quiz here once it is finished
+  quizzesAlreadyTaken.push(this.questionsArray)
   for (let i = 0; i < this.questionsArray.length; i++) {
     const {
       correctAnswer,
@@ -249,6 +241,12 @@ Quiz.prototype.result = function () {
   <h2>Total Score: ${totalScore}</h3>
   <button class="btn btn-success mt-2" id="start">Start</button>
   `);
+
+  if (quizzesAlreadyTaken.length === this.quizQuestionBanks.length) {
+    //remove start button so you can't click it again bc the browser will crash. condition in set question bank causes it.
+    $("#start").remove()
+    $(".card-header").html(`<h3>You've taken all the quizzes!</h3>`)
+  }
 };
 
 $("#quiz").on("change", ".form-check-input", function () {
