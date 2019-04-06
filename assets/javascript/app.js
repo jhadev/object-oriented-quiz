@@ -19,6 +19,7 @@ class Question {
     this.question = question;
     this.choices = choices;
     this.correctAnswer = correctAnswer;
+    this.userAnswer = ""
   }
 }
 
@@ -181,12 +182,12 @@ Quiz.prototype.startQuiz = function () {
 
 //method to finish quiz. Checks answers accordingly and runs the result method.
 Quiz.prototype.finishQuiz = function () {
-  let inputs = $(".form-check").children(".form-check-input:checked");
-  for (let i = 0; i < inputs.length; i++) {
+  for (let i = 0; i < this.questionsArray.length; i++) {
     const {
-      correctAnswer
+      correctAnswer,
+      userAnswer
     } = this.questionsArray[i];
-    if ($(inputs[i]).val() === correctAnswer) {
+    if (userAnswer === correctAnswer) {
       this.correct++;
     } else {
       this.incorrect++;
@@ -202,9 +203,9 @@ Quiz.prototype.result = function () {
   $("#quiz-wrapper h2").remove();
 
   let score = `${((this.correct / this.questionsArray.length) * 100).toFixed(2)}%`;
-  totalCorrect = this.correct + totalCorrect
-  totalIncorrect = this.incorrect + totalIncorrect
-  totalQuestionCount = this.questionsArray.length + totalQuestionCount
+  totalCorrect += this.correct
+  totalIncorrect += this.incorrect
+  totalQuestionCount += this.questionsArray.length
   totalScore = `${((totalCorrect / totalQuestionCount) * 100).toFixed(2)}%`
 
   $("#quiz").html(`
@@ -226,6 +227,15 @@ Quiz.prototype.result = function () {
   <button class="btn btn-success mt-2" id="start">Start</button>
   `);
 };
+
+$("#quiz").on("change", ".form-check-input", function () {
+  // GET question index out of "name" attribute so we know what question you answered
+  const questionIndex = $(this).attr("name");
+  // get value out of radio button you selected
+  const answer = $(this).val();
+  // set answer to question's userAnswer property
+  thisQuiz.questionsArray[questionIndex].userAnswer = answer;
+});
 
 $(document).on("click", "#start", function () {
   $("#quiz").empty();
