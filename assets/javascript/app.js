@@ -6,7 +6,7 @@ let timer;
 let thisQuiz;
 
 let repeatedQuiz = false
-let repeatedQuizIndex = []
+const repeatedQuizIndex = new Array()
 
 //class for making the question objects, takes in the question, choices, and correctAnswer.
 class Question {
@@ -63,6 +63,13 @@ const trivia3 = new Question(
   ["Mr.Zhou", "Mr.Driggers", "Mr.Belding", "Mr.Page"],
   "Mr.Belding"
 );
+
+//declare some question group arrays to use in the addQuestions method
+const oopArr = new Array(oop1, oop2, oop3)
+const triviaArr = new Array(trivia1, trivia2, trivia3)
+//flatten this array but can't use .flat() bc edge is poop.
+const comboArr = new Array(oopArr, triviaArr).reduce((a, b) => a.concat(b), [])
+
 //class blueprint for new Quiz objects, sets correct and incorrect to 0, sets questionsArray and quizQuestionBanks to an empty array 
 class Quiz {
   constructor() {
@@ -70,13 +77,11 @@ class Quiz {
     this.incorrect = 0;
     this.counter = 0;
     //questionsArray will hold the quiz array for the specific instance of the quiz being generated
-    this.questionsArray = []
+    this.questionsArray = new Array()
     //this array holds all the questionBanks as an array of arrays, allowing the quiz to be randomly generated.
-    this.quizQuestionBanks = []
+    this.quizQuestionBanks = new Array()
   }
 }
-
-
 
 //method to add questions to any array. Since the exact number of questions for each quiz can be anything the rest parameter is used.
 Quiz.prototype.addQuestionBank = function (...questions) {
@@ -214,11 +219,11 @@ $(document).on("click", "#start", function () {
   $("#quiz").empty();
   //create newQuiz object
   thisQuiz = new Quiz();
-  //add quiz questions
-  thisQuiz.addQuestionBank(
-    [oop1, oop2, oop3], [trivia1, trivia2, trivia3], [trivia1, trivia2, trivia3, oop1, oop2, oop3])
-  //start quiz
+  //add quiz question arrays declared earlier
+  thisQuiz.addQuestionBank(oopArr, triviaArr, comboArr)
+  //set the questionBank to the new quiz
   thisQuiz.setQuestionBank()
+  //start quiz
   thisQuiz.startQuiz();
 });
 
