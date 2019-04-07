@@ -4,8 +4,7 @@
 let timer;
 //declare variable for the quiz object
 let thisQuiz;
-
-let repeatedQuiz = false
+let quizTitle;
 let repeatedQuizIndex = []
 let quizzesAlreadyTaken = []
 
@@ -16,11 +15,12 @@ let totalQuestionCount = 0
 
 //class for making the question objects, takes in the question, choices, and correctAnswer.
 class Question {
-  constructor(question, choices, correctAnswer) {
+  constructor(question, choices, correctAnswer, title) {
     this.question = question;
     this.choices = choices;
     this.correctAnswer = correctAnswer;
     this.userAnswer = ""
+    this.title = title
   }
 }
 
@@ -34,13 +34,15 @@ const oop1 = new Question(
     "Polymorphism",
     "Impressionism"
   ],
-  "Impressionism"
+  "Impressionism",
+  "Object Oriented Programming"
 );
 
 const oop2 = new Question(
   "What type of inheritence pattern is utilized in JavaScript?",
   ["Prototypal", "Classical", "Trust"],
-  "Prototypal"
+  "Prototypal",
+  "Object Oriented Programming"
 );
 
 const oop3 = new Question(
@@ -50,46 +52,51 @@ const oop3 = new Question(
     "Functional Programming",
     "Neither, everything has its uses"
   ],
-  "Neither, everything has its uses"
+  "Neither, everything has its uses",
+  "Object Oriented Programming"
 );
 
 const trivia1 = new Question(
   "Which group released the hit song, 'Smells Like Teen Spirit'?",
   ["Nirvana", "Backstreet Boys", "The Offspring", "No Doubt"],
-  "Nirvana"
+  "Nirvana",
+  "90's Trivia"
 );
 
 const trivia2 = new Question(
   "What was Doug's best friend's name?",
   ["Skeeter", "Mark", "Zach", "Cody"],
-  "Skeeter"
+  "Skeeter",
+  "90's Trivia"
 );
 
 const trivia3 = new Question(
   "What was the name of the principal at Bayside High in Saved By The Bell?",
   ["Mr.Zhou", "Mr.Driggers", "Mr.Belding", "Mr.Page"],
-  "Mr.Belding"
+  "Mr.Belding",
+  "90's Trivia"
 );
 
 const sciTrivia1 = new Question(
   "What is the name of Jupiter's largest moon",
   ["Oberon", "Ganymede", "Titan", "Europa"],
-  "Ganymede"
+  "Ganymede",
+  "Science Quiz"
 )
 
 const sciTrivia2 = new Question(
   "What does the 'c' in E=mc^2 stand for?",
   ["Energy", "Speed of Light", "Mass", "Dark Matter"],
-  "Speed of Light"
+  "Speed of Light",
+  "Science Quiz"
 )
 
 const sciTrivia3 = new Question(
   "What precious stone is the hardest?",
   ["Diamond", "Ruby", "Sapphire", "Emerald"],
-  "Diamond"
+  "Diamond",
+  "Science Quiz"
 )
-
-
 
 //declare some question group arrays to use in the addQuestions method
 const oopQuiz = [oop1, oop2, oop3]
@@ -132,6 +139,7 @@ Quiz.prototype.setQuestionBank = function () {
     repeatedQuizIndex.unshift(randomIndex)
     //set questions array to the randomly chosen bank
     this.questionsArray = this.quizQuestionBanks[randomIndex]
+    quizTitle = this.questionsArray[0].title
     //set counter to a certain amount of seconds per question
     this.counter = this.questionsArray.length * 10
     //start the quiz
@@ -175,7 +183,8 @@ Quiz.prototype.startQuiz = function () {
     timer = setInterval(this.runCounter.bind(this), 1000);
 
     $("#quiz-wrapper").prepend(
-      `<h2 class="my-4">Time Remaining: <span id="counter-number">${
+      `<h2 class="mt-4">${quizTitle}</h2>
+      <h2 class="my-4">Time Remaining: <span id="counter-number">${
       this.convertTime(this.counter)
     }</span></h2>`
     );
@@ -243,25 +252,25 @@ Quiz.prototype.result = function () {
   totalScore = `${((totalCorrect / totalQuestionCount) * 100).toFixed(2)}%`
 
   $("#quiz").html(`
-      <h2>Finished</h2>
-      <div class="card-body game-stats"></div>
+  <h2 class="finished">Finished</h2>
+  <div class="card-body game-stats"></div>
   `);
   $(".game-stats").append(`
   <h3>Correct: ${this.correct}</h3>
   <h3>Incorrect: ${this.incorrect}</h3>
   <h2>Your Score: ${score}</h2>
-  <hr>
+  <hr class="my-4">
   <h3>Total Correct: ${totalCorrect}</h3>
   <h3>Total Incorrect: ${totalIncorrect}</h3>
   <h2>Total Score: ${totalScore}</h3>
-  <button class="btn btn-outline-success mt-2" id="start">Start Next Quiz</button>
+  <button class="btn btn-outline-success mt-4" id="start">Start Next Quiz</button>
   `);
 
   if (quizzesAlreadyTaken.length === this.quizQuestionBanks.length) {
     //remove start button so you can't click it again bc the browser will crash. condition in set question bank causes it.
     $("#start").remove()
-    $(".card-header").html(`<h3>You've taken all the quizzes!</h3>`)
-    $(".game-stats").append(`<button class="btn btn-outline-success mt-2" id="start-over">Start Over</button>`)
+    $(".finished").html(`<h3>You've taken all the quizzes!</h3>`)
+    $(".game-stats").append(`<button class="btn btn-outline-success mt-4" id="start-over">Start Over</button>`)
   }
 };
 
