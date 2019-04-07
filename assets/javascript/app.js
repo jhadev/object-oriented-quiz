@@ -4,6 +4,7 @@
 let timer;
 //declare variable for the quiz object
 let thisQuiz;
+let quizTitle;
 
 let repeatedQuiz = false
 let repeatedQuizIndex = []
@@ -16,11 +17,12 @@ let totalQuestionCount = 0
 
 //class for making the question objects, takes in the question, choices, and correctAnswer.
 class Question {
-  constructor(question, choices, correctAnswer) {
+  constructor(question, choices, correctAnswer, title) {
     this.question = question;
     this.choices = choices;
     this.correctAnswer = correctAnswer;
     this.userAnswer = ""
+    this.title = title
   }
 }
 
@@ -34,13 +36,15 @@ const oop1 = new Question(
     "Polymorphism",
     "Impressionism"
   ],
-  "Impressionism"
+  "Impressionism",
+  "OOP Quiz"
 );
 
 const oop2 = new Question(
   "What type of inheritence pattern is utilized in JavaScript?",
   ["Prototypal", "Classical", "Trust"],
-  "Prototypal"
+  "Prototypal",
+  "OOP Quiz"
 );
 
 const oop3 = new Question(
@@ -50,43 +54,50 @@ const oop3 = new Question(
     "Functional Programming",
     "Neither, everything has its uses"
   ],
-  "Neither, everything has its uses"
+  "Neither, everything has its uses",
+  "OOP Quiz"
 );
 
 const trivia1 = new Question(
   "Which group released the hit song, 'Smells Like Teen Spirit'?",
   ["Nirvana", "Backstreet Boys", "The Offspring", "No Doubt"],
-  "Nirvana"
+  "Nirvana",
+  "90s Trivia"
 );
 
 const trivia2 = new Question(
   "What was Doug's best friend's name?",
   ["Skeeter", "Mark", "Zach", "Cody"],
-  "Skeeter"
+  "Skeeter",
+  "90s Trivia"
 );
 
 const trivia3 = new Question(
   "What was the name of the principal at Bayside High in Saved By The Bell?",
   ["Mr.Zhou", "Mr.Driggers", "Mr.Belding", "Mr.Page"],
-  "Mr.Belding"
+  "Mr.Belding",
+  "90s Trivia"
 );
 
 const sciTrivia1 = new Question(
   "What is the name of Jupiter's largest moon",
   ["Oberon", "Ganymede", "Titan", "Europa"],
-  "Ganymede"
+  "Ganymede",
+  "Science Quiz"
 )
 
 const sciTrivia2 = new Question(
   "What does the 'c' in E=mc^2 stand for?",
   ["Energy", "Speed of Light", "Mass", "Dark Matter"],
-  "Speed of Light"
+  "Speed of Light",
+  "Science Quiz"
 )
 
 const sciTrivia3 = new Question(
   "What precious stone is the hardest?",
   ["Diamond", "Ruby", "Sapphire", "Emerald"],
-  "Diamond"
+  "Diamond",
+  "Science Quiz"
 )
 
 
@@ -97,6 +108,11 @@ const triviaQuiz = [trivia1, trivia2, trivia3]
 const sciQuiz = [sciTrivia1, sciTrivia2, sciTrivia3]
 //flatten this array but can't use .flat() bc edge is poop.
 const comboQuiz = [oopQuiz, sciQuiz].reduce((a, b) => a.concat(b), [])
+let oopTitle = "Object Oriented Programming Quiz"
+let quizzesWithTitle = new Map().set(oopTitle, oopQuiz)
+// oopQuizWithTitle.set(oopTitle, oopQuiz)
+
+console.log(quizzesWithTitle)
 
 //class blueprint for new Quiz objects, sets correct and incorrect to 0, sets questionsArray and quizQuestionBanks to an empty array 
 class Quiz {
@@ -132,6 +148,9 @@ Quiz.prototype.setQuestionBank = function () {
     repeatedQuizIndex.unshift(randomIndex)
     //set questions array to the randomly chosen bank
     this.questionsArray = this.quizQuestionBanks[randomIndex]
+
+    quizTitle = this.questionsArray[0].title
+    console.log(quizTitle)
     //set counter to a certain amount of seconds per question
     this.counter = this.questionsArray.length * 10
     //start the quiz
@@ -174,7 +193,8 @@ Quiz.prototype.startQuiz = function () {
     timer = setInterval(this.runCounter.bind(this), 1000);
 
     $("#quiz-wrapper").prepend(
-      `<h2 class="my-4">Time Remaining: <span id="counter-number">${
+      `<h2 class="mt-4">${quizTitle}</h2>
+      <h2 class="my-4">Time Remaining: <span id="counter-number">${
       this.convertTime(this.counter)
     }</span></h2>`
     );
@@ -285,7 +305,7 @@ $(document).on("click", "#start", function () {
   //create newQuiz object
   thisQuiz = new Quiz();
   //add quiz question arrays declared earlier
-  thisQuiz.addQuestionBank(oopQuiz, triviaQuiz, sciQuiz)
+  thisQuiz.addQuestionBank(sciQuiz, triviaQuiz, oopQuiz)
   //set the questionBank to the new quiz
   thisQuiz.setQuestionBank()
   //start quiz
