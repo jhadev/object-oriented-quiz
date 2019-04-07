@@ -4,7 +4,6 @@
 let timer;
 //declare variable for the quiz object
 let thisQuiz;
-let quizTitle;
 let repeatedQuizIndex = []
 let quizzesAlreadyTaken = []
 
@@ -103,7 +102,7 @@ const oopQuiz = [oop1, oop2, oop3]
 const triviaQuiz = [trivia1, trivia2, trivia3]
 const sciQuiz = [sciTrivia1, sciTrivia2, sciTrivia3]
 //flatten this array but can't use .flat() bc edge is poop.
-const comboQuiz = [oopQuiz, sciQuiz].reduce((a, b) => a.concat(b), [])
+const comboQuiz = [oopQuiz, sciQuiz, triviaQuiz].reduce((a, b) => a.concat(b), [])
 
 //class blueprint for new Quiz objects, sets correct and incorrect to 0, sets questionsArray and quizQuestionBanks to an empty array 
 class Quiz {
@@ -123,7 +122,7 @@ Quiz.prototype.addQuestionBank = function (...questions) {
   //push our array of questionBanks
   this.quizQuestionBanks.push(...questions);
 }
-
+//use lodash to check for 2 equal arrays
 Quiz.prototype.areEqual = function (arr1, arr2) {
   return _.isEqual(arr1, arr2)
 }
@@ -139,7 +138,6 @@ Quiz.prototype.setQuestionBank = function () {
     repeatedQuizIndex.unshift(randomIndex)
     //set questions array to the randomly chosen bank
     this.questionsArray = this.quizQuestionBanks[randomIndex]
-    quizTitle = this.questionsArray[0].title
     //set counter to a certain amount of seconds per question
     this.counter = this.questionsArray.length * 10
     //start the quiz
@@ -173,18 +171,33 @@ Quiz.prototype.runCounter = function () {
   }
 };
 
+//this allows combo quizzes to combine titles
+Quiz.prototype.setTitle = function () {
+  let titleArray = []
+  this.questionsArray.map(question => {
+    console.log(question)
+    const {
+      title
+    } = question
+    titleArray.push(title)
+  })
+  //call lodash to remove dupes
+  const $titleArray = _.uniq(titleArray)
+  $("#quiz-wrapper").prepend(
+    `<h2 class="title my-4">${$titleArray.join(` & `)}</h2>`)
+}
+
 //method to start the quiz takes in an array.
 Quiz.prototype.startQuiz = function () {
+  this.setTitle()
   $(".card-bg").addClass("border-light")
-  console.log(quizzesAlreadyTaken)
   //checking if the 2 arrays are equal before allowing quiz to be taken.
   if (!this.areEqual(quizzesAlreadyTaken.sort(), this.quizQuestionBanks.sort())) {
     //setInterval method called to run the counter method every second. Bind this so it doesn't lose context.
     timer = setInterval(this.runCounter.bind(this), 1000);
 
-    $("#quiz-wrapper").prepend(
-      `<h2 class="mt-4">${quizTitle}</h2>
-      <h2 class="my-4">Time Remaining: <span id="counter-number">${
+    $(".title").after(
+      `<h2 class="my-4">Time Remaining: <span id="counter-number">${
       this.convertTime(this.counter)
     }</span></h2>`
     );
@@ -199,12 +212,12 @@ Quiz.prototype.startQuiz = function () {
       } = quizQuestion;
 
       $("#quiz").append(`
-      <h2 class="rounded mt-2">${question}</h2>
+      <h2 class="rounded my-4">${question}</h2>
      `);
       this.randomize(choices);
       for (choice of choices) {
         $("#quiz").append(
-          `<div class="form-check form-check-inline">
+          `<div class="form-check form-check-inline my-2">
           <input class="form-check-input" name="${index}" type="radio" id="${choice}" value="${choice}">
           <label class="form-check-label answers" for="${choice}">${choice}</label>
         </div>`
@@ -288,7 +301,7 @@ $(document).on("click", "#start", function () {
   //create newQuiz object
   thisQuiz = new Quiz();
   //add quiz question arrays declared earlier
-  thisQuiz.addQuestionBank(oopQuiz, triviaQuiz, sciQuiz)
+  thisQuiz.addQuestionBank(comboQuiz, sciQuiz)
   //set the questionBank to the new quiz
   thisQuiz.setQuestionBank()
   //start quiz
