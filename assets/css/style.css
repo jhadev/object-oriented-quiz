@@ -6,6 +6,22 @@
   font-size: 1.8rem;
 }
 
+body {
+  background-color: black;
+}
+
+.card-bg {
+  background-color: black !important;
+}
+
+hr {
+  border-color: #fff;
+}
+
+/* .game-stats {
+  margin-top: -4px;
+} */
+
 @media screen and (max-width: 640px) {
 
   #quiz>h2 {

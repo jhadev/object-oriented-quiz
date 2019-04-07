@@ -204,7 +204,7 @@ Quiz.prototype.startQuiz = function () {
 
     $("#quiz").append(`
   <div class="row justify-content-center">
-    <button class="mt-4 btn btn-danger" id="finish">Finish</button>
+    <button class="mt-4 btn btn-outline-danger" id="finish">Finish</button>
   </div`);
   } else {
     this.result()
@@ -244,11 +244,11 @@ Quiz.prototype.result = function () {
   $("#quiz").html(`
   <div class="row justify-content-center">
     <div class="col-12 col-md-6">
-      <div class="card mt-4 text-dark">
-        <div class="card-header">
+      <div class="card mt-4 text-light card-bg border-light">
+        <div class="card-header border-light">
         <h2>Finished</h2>
         </div>
-      <div class="card-body"></div>
+      <div class="card-body game-stats"></div>
      </div>
     </div>
   </div>`);
@@ -260,14 +260,14 @@ Quiz.prototype.result = function () {
   <h3>Total Correct: ${totalCorrect}</h3>
   <h3>Total Incorrect: ${totalIncorrect}</h3>
   <h2>Total Score: ${totalScore}</h3>
-  <button class="btn btn-success mt-2" id="start">Start Next Quiz</button>
+  <button class="btn btn-outline-success mt-2" id="start">Start Next Quiz</button>
   `);
 
   if (quizzesAlreadyTaken.length === this.quizQuestionBanks.length) {
     //remove start button so you can't click it again bc the browser will crash. condition in set question bank causes it.
     $("#start").remove()
     $(".card-header").html(`<h3>You've taken all the quizzes!</h3>`)
-    $(".card-body").append(`<button class="btn btn-success mt-2" id="start-over">Start Over</button>`)
+    $(".card-body").append(`<button class="btn btn-outline-success mt-2" id="start-over">Start Over</button>`)
   }
 };
 
