@@ -22,6 +22,12 @@ hr {
   margin-top: -4px;
 } */
 
+.jumbo-style,
+.jumbotron {
+  background-color: black;
+  margin-bottom: 0px !important;
+}
+
 @media screen and (max-width: 640px) {
 
   #quiz>h2 {
