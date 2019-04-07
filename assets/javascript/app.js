@@ -108,11 +108,11 @@ const triviaQuiz = [trivia1, trivia2, trivia3]
 const sciQuiz = [sciTrivia1, sciTrivia2, sciTrivia3]
 //flatten this array but can't use .flat() bc edge is poop.
 const comboQuiz = [oopQuiz, sciQuiz].reduce((a, b) => a.concat(b), [])
-let oopTitle = "Object Oriented Programming Quiz"
-let quizzesWithTitle = new Map().set(oopTitle, oopQuiz)
+// let oopTitle = "Object Oriented Programming Quiz"
+// let quizzesWithTitle = new Map().set(oopTitle, oopQuiz)
 // oopQuizWithTitle.set(oopTitle, oopQuiz)
 
-console.log(quizzesWithTitle)
+// console.log(quizzesWithTitle)
 
 //class blueprint for new Quiz objects, sets correct and incorrect to 0, sets questionsArray and quizQuestionBanks to an empty array 
 class Quiz {
@@ -150,7 +150,6 @@ Quiz.prototype.setQuestionBank = function () {
     this.questionsArray = this.quizQuestionBanks[randomIndex]
 
     quizTitle = this.questionsArray[0].title
-    console.log(quizTitle)
     //set counter to a certain amount of seconds per question
     this.counter = this.questionsArray.length * 10
     //start the quiz
@@ -186,9 +185,20 @@ Quiz.prototype.runCounter = function () {
 
 //method to start the quiz takes in an array.
 Quiz.prototype.startQuiz = function () {
-  console.log(quizzesAlreadyTaken)
   //checking if the 2 arrays are equal before allowing quiz to be taken.
   if (!this.areEqual(quizzesAlreadyTaken.sort(), this.quizQuestionBanks.sort())) {
+
+    // if (quizTitle === "OOP Quiz") {
+    //   $("body").removeClass("bg-danger bg-success").addClass("bg-dark")
+    // }
+
+    // if (quizTitle === "Science Quiz") {
+    //   $("body").removeClass("bg-danger bg-dark").addClass("bg-success")
+    // }
+
+    // if (quizTitle === "90s Trivia") {
+    //   $("body").removeClass("bg-success bg-dark text-light").addClass("text-dark").css("background-image", "url('assets/images/tacky.jpg')")
+    // }
     //setInterval method called to run the counter method every second. Bind this so it doesn't lose context.
     timer = setInterval(this.runCounter.bind(this), 1000);
 
