@@ -188,17 +188,17 @@ Quiz.prototype.startQuiz = function () {
   //checking if the 2 arrays are equal before allowing quiz to be taken.
   if (!this.areEqual(quizzesAlreadyTaken.sort(), this.quizQuestionBanks.sort())) {
 
-    // if (quizTitle === "OOP Quiz") {
-    //   $("body").removeClass("bg-danger bg-success").addClass("bg-dark")
-    // }
+    if (quizTitle === "OOP Quiz") {
+      $("body").removeClass("bg-danger bg-success").addClass("bg-dark")
+    }
 
-    // if (quizTitle === "Science Quiz") {
-    //   $("body").removeClass("bg-danger bg-dark").addClass("bg-success")
-    // }
+    if (quizTitle === "Science Quiz") {
+      $("body").removeClass("bg-danger bg-dark").addClass("bg-success")
+    }
 
-    // if (quizTitle === "90s Trivia") {
-    //   $("body").removeClass("bg-success bg-dark text-light").addClass("text-dark").css("background-image", "url('assets/images/tacky.jpg')")
-    // }
+    if (quizTitle === "90s Trivia") {
+      $("body").removeClass("bg-success bg-dark").css("background-image", "url('assets/images/tacky.jpg')")
+    }
     //setInterval method called to run the counter method every second. Bind this so it doesn't lose context.
     timer = setInterval(this.runCounter.bind(this), 1000);
 
@@ -219,16 +219,22 @@ Quiz.prototype.startQuiz = function () {
       } = quizQuestion;
 
       $("#quiz").append(`
-      <h2 class="rounded mt-2">${question}</h2>
+      <h2 class="rounded my-4">${question}</h2>
      `);
       this.randomize(choices);
       for (choice of choices) {
-        $("#quiz").append(
-          `<div class="form-check form-check-inline">
-          <input class="form-check-input" name="${index}" type="radio" id="${choice}" value="${choice}">
-          <label class="form-check-label answers" for="${choice}">${choice}</label>
-        </div>`
-        );
+        $("#quiz").append(`
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-8">
+            <div class="card mt-4 text-light card-bg border-light">
+              <div class="card-body border-light">
+                <div class="form-check form-check-inline">
+                <input class="form-check-input" name="${index}" type="radio" id="${choice}" value="${choice}">
+                <label class="form-check-label answers" for="${choice}">${choice}</label>
+              </div>
+            </div>
+          </div>
+        </div>`);
       }
     });
 
@@ -274,11 +280,11 @@ Quiz.prototype.result = function () {
   $("#quiz").html(`
   <div class="row justify-content-center">
     <div class="col-12 col-md-6">
-      <div class="card mt-4 text-dark">
-        <div class="card-header">
+      <div class="card mt-4 text-light card-bg border-light">
+        <div class="card-header border-light">
         <h2>Finished</h2>
         </div>
-      <div class="card-body"></div>
+      <div class="card-body game-stats"></div>
      </div>
     </div>
   </div>`);
@@ -290,14 +296,14 @@ Quiz.prototype.result = function () {
   <h3>Total Correct: ${totalCorrect}</h3>
   <h3>Total Incorrect: ${totalIncorrect}</h3>
   <h2>Total Score: ${totalScore}</h3>
-  <button class="btn btn-success mt-2" id="start">Start Next Quiz</button>
+  <button class="btn btn-outline-success mt-2" id="start">Start Next Quiz</button>
   `);
 
   if (quizzesAlreadyTaken.length === this.quizQuestionBanks.length) {
     //remove start button so you can't click it again bc the browser will crash. condition in set question bank causes it.
     $("#start").remove()
     $(".card-header").html(`<h3>You've taken all the quizzes!</h3>`)
-    $(".card-body").append(`<button class="btn btn-success mt-2" id="start-over">Start Over</button>`)
+    $(".card-body").append(`<button class="btn btn-outline-success mt-2" id="start-over">Start Over</button>`)
   }
 };
 
