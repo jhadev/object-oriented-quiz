@@ -167,6 +167,7 @@ Quiz.prototype.runCounter = function () {
 
 //method to start the quiz takes in an array.
 Quiz.prototype.startQuiz = function () {
+  $(".card-bg").addClass("border-light")
   console.log(quizzesAlreadyTaken)
   //checking if the 2 arrays are equal before allowing quiz to be taken.
   if (!this.areEqual(quizzesAlreadyTaken.sort(), this.quizQuestionBanks.sort())) {
@@ -242,17 +243,10 @@ Quiz.prototype.result = function () {
   totalScore = `${((totalCorrect / totalQuestionCount) * 100).toFixed(2)}%`
 
   $("#quiz").html(`
-  <div class="row justify-content-center">
-    <div class="col-12 col-md-6">
-      <div class="card mt-4 text-light card-bg border-light">
-        <div class="card-header border-light">
-        <h2>Finished</h2>
-        </div>
+      <h2>Finished</h2>
       <div class="card-body game-stats"></div>
-     </div>
-    </div>
-  </div>`);
-  $(".card-body").append(`
+  `);
+  $(".game-stats").append(`
   <h3>Correct: ${this.correct}</h3>
   <h3>Incorrect: ${this.incorrect}</h3>
   <h2>Your Score: ${score}</h2>
@@ -267,7 +261,7 @@ Quiz.prototype.result = function () {
     //remove start button so you can't click it again bc the browser will crash. condition in set question bank causes it.
     $("#start").remove()
     $(".card-header").html(`<h3>You've taken all the quizzes!</h3>`)
-    $(".card-body").append(`<button class="btn btn-outline-success mt-2" id="start-over">Start Over</button>`)
+    $(".game-stats").append(`<button class="btn btn-outline-success mt-2" id="start-over">Start Over</button>`)
   }
 };
 
