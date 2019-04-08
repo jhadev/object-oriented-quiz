@@ -175,14 +175,15 @@ Quiz.prototype.runCounter = function () {
 Quiz.prototype.setTitle = function () {
   let titleArray = []
   this.questionsArray.map(question => {
-    console.log(question)
     const {
       title
     } = question
     titleArray.push(title)
   })
   //call lodash to remove dupes
-  const $titleArray = _.uniq(titleArray)
+  // const $titleArray = _.uniq(titleArray)
+  //use a set to remove dupes instead
+  const $titleArray = Array.from(new Set(titleArray))
   $("#quiz-wrapper").prepend(
     `<h2 class="title my-4">${$titleArray.join(` & `)}</h2>`)
 }
