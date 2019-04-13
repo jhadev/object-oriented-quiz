@@ -193,6 +193,14 @@ Quiz.prototype.setTitle = function() {
   $("#quiz-wrapper").prepend(
     `<h2 class="title my-4">${$titleArray.join(` & `)}</h2>`
   );
+
+  // $(".title").css("background", "black");
+  //   //starting themes based on title
+  // if ($titleArray[0] === "90's Trivia") {
+  //   $("body").css("background-image", "url('assets/images/tacky.jpg')");
+  // } else {
+  //   $("body").css("background", "black");
+  // }
 };
 
 //method to start the quiz takes in an array.
@@ -268,6 +276,7 @@ Quiz.prototype.result = function() {
   let score = `${((this.correct / this.questionsArray.length) * 100).toFixed(
     2
   )}%`;
+
   quizzes.totalCorrect += this.correct;
   quizzes.totalIncorrect += this.incorrect;
   quizzes.totalQuestionCount += this.questionsArray.length;
