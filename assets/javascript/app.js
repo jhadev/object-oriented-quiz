@@ -181,13 +181,8 @@ Quiz.prototype.runCounter = function() {
 
 //this allows combo quizzes to combine titles
 Quiz.prototype.setTitle = function() {
-  let titleArray = [];
-  this.questionsArray.map(question => {
-    const { title } = question;
-    titleArray.push(title);
-  });
-  //call lodash to remove dupes
-  // const $titleArray = _.uniq(titleArray)
+  //get title
+  const titleArray = this.questionsArray.map(question => question.title);
   //use a set to remove dupes instead
   const $titleArray = Array.from(new Set(titleArray));
   $("#quiz-wrapper").prepend(
