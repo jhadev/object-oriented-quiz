@@ -21,93 +21,89 @@ class Question {
     this.choices = choices;
     this.correctAnswer = correctAnswer;
     this.title = title;
-    this.userAnswer = "";
+    this.userAnswer = '';
   }
 }
 
 //make some question objects with the blueprint
 const oop1 = new Question(
-  "What is not a principle of Object Oriented Programming?",
+  'What is not a principle of Object Oriented Programming?',
   [
-    "Abstraction",
-    "Encapsulation",
-    "Inheritence",
-    "Polymorphism",
-    "Impressionism"
+    'Abstraction',
+    'Encapsulation',
+    'Inheritence',
+    'Polymorphism',
+    'Impressionism'
   ],
-  "Impressionism",
-  "Object Oriented Programming"
+  'Impressionism',
+  'Object Oriented Programming'
 );
 
 const oop2 = new Question(
-  "What type of inheritence pattern is utilized in JavaScript?",
-  ["Prototypal", "Classical", "Trust"],
-  "Prototypal",
-  "Object Oriented Programming"
+  'What type of inheritence pattern is utilized in JavaScript?',
+  ['Prototypal', 'Classical', 'Trust'],
+  'Prototypal',
+  'Object Oriented Programming'
 );
 
 const oop3 = new Question(
-  "Which is better? Functional Programming or Object Oriented Programming?",
+  'Which is better? Functional Programming or Object Oriented Programming?',
   [
-    "Object Oriented Programming",
-    "Functional Programming",
-    "Neither, everything has its uses"
+    'Object Oriented Programming',
+    'Functional Programming',
+    'Neither, everything has its uses'
   ],
-  "Neither, everything has its uses",
-  "Object Oriented Programming"
+  'Neither, everything has its uses',
+  'Object Oriented Programming'
 );
 
 const trivia1 = new Question(
   "Which group released the hit song, 'Smells Like Teen Spirit'?",
-  ["Nirvana", "Backstreet Boys", "The Offspring", "No Doubt"],
-  "Nirvana",
+  ['Nirvana', 'Backstreet Boys', 'The Offspring', 'No Doubt'],
+  'Nirvana',
   "90's Trivia"
 );
 
 const trivia2 = new Question(
   "What was Doug's best friend's name?",
-  ["Skeeter", "Mark", "Zach", "Cody"],
-  "Skeeter",
+  ['Skeeter', 'Mark', 'Zach', 'Cody'],
+  'Skeeter',
   "90's Trivia"
 );
 
 const trivia3 = new Question(
-  "What was the name of the principal at Bayside High in Saved By The Bell?",
-  ["Mr.Zhou", "Mr.Driggers", "Mr.Belding", "Mr.Page"],
-  "Mr.Belding",
+  'What was the name of the principal at Bayside High in Saved By The Bell?',
+  ['Mr.Zhou', 'Mr.Driggers', 'Mr.Belding', 'Mr.Page'],
+  'Mr.Belding',
   "90's Trivia"
 );
 
 const sciTrivia1 = new Question(
   "What is the name of Jupiter's largest moon",
-  ["Oberon", "Ganymede", "Titan", "Europa"],
-  "Ganymede",
-  "Science Quiz"
+  ['Oberon', 'Ganymede', 'Titan', 'Europa'],
+  'Ganymede',
+  'Science Quiz'
 );
 
 const sciTrivia2 = new Question(
   "What does the 'c' in E=mc^2 stand for?",
-  ["Energy", "Speed of Light", "Mass", "Dark Matter"],
-  "Speed of Light",
-  "Science Quiz"
+  ['Energy', 'Speed of Light', 'Mass', 'Dark Matter'],
+  'Speed of Light',
+  'Science Quiz'
 );
 
 const sciTrivia3 = new Question(
-  "What precious stone is the hardest?",
-  ["Diamond", "Ruby", "Sapphire", "Emerald"],
-  "Diamond",
-  "Science Quiz"
+  'What precious stone is the hardest?',
+  ['Diamond', 'Ruby', 'Sapphire', 'Emerald'],
+  'Diamond',
+  'Science Quiz'
 );
 
 //declare some question group arrays to use in the addQuestions method
 const oopQuiz = [oop1, oop2, oop3];
 const triviaQuiz = [trivia1, trivia2, trivia3];
 const sciQuiz = [sciTrivia1, sciTrivia2, sciTrivia3];
-//flatten this array but can't use .flat() bc edge is poop.
-const comboQuiz = [oopQuiz, sciQuiz, triviaQuiz].reduce(
-  (a, b) => a.concat(b),
-  []
-);
+const comboQuiz = [...oopQuiz, ...sciQuiz, ...triviaQuiz];
 
 //class blueprint for new Quiz objects, sets correct and incorrect to 0, sets questionsArray and quizQuestionBanks to an empty array
 class Quiz {
@@ -292,17 +288,17 @@ class Quiz {
   }
 }
 
-$("#quiz").on("change", ".form-check-input", function() {
+$('#quiz').on('change', '.form-check-input', function() {
   // GET question index out of "name" attribute so we know what question you answered
-  const questionIndex = $(this).attr("name");
+  const questionIndex = $(this).attr('name');
   // get value out of radio button selected
   const answer = $(this).val();
   // set answer to question's userAnswer property
   thisQuiz.questionsArray[questionIndex].userAnswer = answer;
 });
 
-$(document).on("click", "#start", function() {
-  $("#quiz").empty();
+$(document).on('click', '#start', function() {
+  $('#quiz').empty();
   //create newQuiz object
   thisQuiz = new Quiz();
   //add quiz question arrays declared earlier
@@ -313,10 +309,10 @@ $(document).on("click", "#start", function() {
   // thisQuiz.startQuiz();
 });
 
-$(document).on("click", "#finish", function() {
+$(document).on('click', '#finish', function() {
   thisQuiz.finishQuiz();
 });
 
-$(document).on("click", "#start-over", function() {
+$(document).on('click', '#start-over', function() {
   window.location.reload();
 });
